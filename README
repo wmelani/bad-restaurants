@@ -1,0 +1,18 @@
+BAD RESTAURANTS
+
+
+
+
+Uses the dataset from San Francisco government to find resturants and their health scores based on location.
+
+2 projects exist:
+
+
+dataset -
+
+  parses the csv file and loads into the mongo database specified in the confid.json in the root of the project.
+
+server -
+
+  two simple endpoints for find by id / search
+

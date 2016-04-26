@@ -1,0 +1,12 @@
+{
+    "database" : {
+      "host" : "localhost",
+      "password" : null,
+      "username" : null,
+      "name" : "badRestaurants",
+      "port" : "27017"
+    },
+    "server": {
+      "port" : 3069
+    }
+}
