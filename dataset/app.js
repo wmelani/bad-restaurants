@@ -9,7 +9,7 @@ function createBusinessRecords() {
 
     var businessesPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + '/businesses_plus.csv');
     var inspectionsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + '/inspections_plus.csv');
-    var violationsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + 'violations_plus.csv');
+    var violationsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + '/violations_plus.csv');
 
 
 
