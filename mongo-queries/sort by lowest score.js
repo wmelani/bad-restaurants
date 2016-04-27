@@ -1,0 +1,1 @@
+db.businesses.find({ 'currentScore' : { $ne : null }}).sort( { currentScore: 1 } )
