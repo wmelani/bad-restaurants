@@ -4,6 +4,7 @@ var businessSchema = require('../../mongo/schema/Business.js');
 
 var inspectionsFactory = require('./InspectionFactory');
 var violationsFactory = require('./ViolationFactory');
+var dateUtilities = require('../utilities/dateUtilities');
 
 function create (business, inspections,violations) {
     var model = {
@@ -38,6 +39,7 @@ function create (business, inspections,violations) {
             var inspection = inspectionsFactory.create(inspections[i]);
             model.inspections.push(inspection);
         }
+        model.currentScore = getCurrentScore(model.inspections);
     }
     if (violations){
         model.violations = [];
@@ -47,6 +49,16 @@ function create (business, inspections,violations) {
         }
     }
     return new businessSchema.BusinessService(model);
+}
+function getCurrentScore(inspections){
+    var sortedRecords = dateUtilities.sortRecordsOnDate(inspections,"date").reverse();
+    for (var i = 0; i < sortedRecords.length; i++){
+        var current = sortedRecords[i];
+        if (current.score !== null){
+            return current.score;
+        }
+    }
+    return null;
 }
 module.exports = exports;
 exports.create = create;

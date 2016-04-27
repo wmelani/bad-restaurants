@@ -28,6 +28,7 @@ var business = new Schema({
         "businessCertificate" : String,
         "applicationDate" : String
     },
+    "currentScore" : Number,
     "inspections" : [ inspectionModel],
     "violations" : [ violationModel ]
 });

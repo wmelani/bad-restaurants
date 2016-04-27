@@ -35,7 +35,7 @@ function * search(params){
                 '$maxDistance': params.radius,
                 '$geometry': { type: 'Point', coordinates: [ params.lat, params.long ] } } }
             });
-        app.logger.error("Found " + result.length + " results for search with params " + JSON.stringify(params,null,4));
+        app.logger.info("Found " + result.length + " results for search with params " + JSON.stringify(params,null,4));
 
         return result;
     }
