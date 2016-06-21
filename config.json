@@ -8,5 +8,8 @@
     },
     "server": {
       "port" : 3069
+    },
+    "paths" : {
+      "static" : "web/dist"
     }
 }

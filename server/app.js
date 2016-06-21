@@ -9,6 +9,10 @@ app.models = {};
 app.models.Business = require('../mongo/schema/Business').BusinessService;
 
 function run(){
+    if (app.__initialized){
+        throw new Error("app was already initialized");
+    }
+
     app.logger = require('./logger').create(__dirname);
     app.logger.info("App started");
     app.controllers.Business = require('./controllers/business');
@@ -16,6 +20,7 @@ function run(){
     require('./koa').register(app);
     require('./routes').registerRoutes(app);
     require('../mongo/mongoConnection').connect(app.config.database);
+    app.__initialized = true;
 
 }
 
