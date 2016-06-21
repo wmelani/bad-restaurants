@@ -7,7 +7,7 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var dir_js = path.resolve(__dirname, 'app');
 var dir_css = path.resolve(__dirname, 'css');
 var dir_build = path.resolve(__dirname, 'dist');
-
+var globalConfig = require("../config");
 module.exports = {
     entry: {
       app : path.resolve(__dirname, 'index.js'),
@@ -23,7 +23,7 @@ module.exports = {
     devServer: {
         contentBase: dir_build,
         proxy: {
-            "/api/*": "http://localhost:3069"
+            "/api*" : globalConfig.server.protocol + "://" + globalConfig.server.host + ":" + globalConfig.server.port + globalConfig.server.root
         }
     }, 
     stats: {
