@@ -1,19 +1,24 @@
 {
   "devDependencies": {
-    "webpack": "latest",
-    "extract-text-webpack-plugin": "latest",
-    "url-loader": "latest",
-    "file-loader": "latest",
-    "resolve-url": "latest",
     "babel": "latest",
     "babel-loader": "latest",
     "babel-preset-es2015": "latest",
     "babel-preset-react": "latest",
+    "babel-preset-stage-0": "^6.5.0",
+    "css-loader": "latest",
+    "extract-text-webpack-plugin": "latest",
+    "file-loader": "latest",
+    "node-sass": "latest",
     "react": "latest",
     "react-dom": "latest",
-    "css-loader": "latest",
+    "resolve-url": "latest",
+    "sass-loader": "latest",
     "style-loader": "latest",
-    "node-sass": "latest",
-    "sass-loader": "latest"
+    "url-loader": "latest",
+    "webpack": "latest"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.9.1",
+    "pajax": "^5.0.3"
   }
 }
