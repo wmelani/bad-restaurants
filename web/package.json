@@ -19,6 +19,10 @@
   },
   "dependencies": {
     "babel-polyfill": "^6.9.1",
-    "pajax": "^5.0.3"
+    "google-maps": "^3.2.1",
+    "lodash": "^4.13.1",
+    "pajax": "^5.0.3",
+    "react-addons-update": "^15.1.0",
+    "react-google-maps": "^4.11.0"
   }
 }

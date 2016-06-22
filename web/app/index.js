@@ -2,5 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import BusinessList from "./business-list";
+import MapView from "./maps/mapview";
 
-ReactDOM.render(<BusinessList/>, document.getElementById("application"));
+ReactDOM.render(<MapView/>, document.getElementById("application"));

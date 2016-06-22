@@ -55,8 +55,12 @@ module.exports = {
                 test: /\.html$/
             },
             {
-                loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap!sass-loader?sourceMap'),
-                test: /\.sass$/
+                test: /\.sass$/,
+                include: dir_css,
+                loaders: [
+                    'style',
+                    'css'
+                ]
             }
         ]
     }
