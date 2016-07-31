@@ -8,7 +8,7 @@ import Logo from './logo'
 ReactDOM.render(
         <div className="ui container">
             <Logo/>
-            <div className="ui container">
+            <div>
                 <MapComponent/>
             </div>
         </div>

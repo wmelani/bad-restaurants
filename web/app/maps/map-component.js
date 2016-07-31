@@ -3,8 +3,7 @@ import MapControls from './map-controls';
 import MapView from './map-view';
 import GeoLocationResolver from './geo-location-resolver';
 import BusinessService from '../business-service';
-import MarkerFactory from './factories/marker-factory';
-
+import DetailViewComponent from './detailed/detail-view-component';
 var config = require("../../config.json");
 
 export default class MapComponent extends React.Component {
@@ -22,6 +21,7 @@ export default class MapComponent extends React.Component {
         };
         this.handleRadiusChanged = this.handleRadiusChanged.bind(this);
         this.handleSearchChanged = this.handleSearchChanged.bind(this);
+        this.handleMarkerSelected= this.handleMarkerSelected.bind(this);
         this.businessService = new BusinessService();
     }
 
@@ -33,6 +33,11 @@ export default class MapComponent extends React.Component {
         console.log("value is becoming ", e.target.value);
         this.setState({"searchQuery" : e.target.value})
     }
+    handleMarkerSelected(e){
+        console.log("marker selected",e);
+        this.setState({"selectedItem" : e});
+        debugger;
+    }
     async componentDidMount(){
         var geoLocation = await GeoLocationResolver.getGeoLocation();
         this.setState({"mapCenter" : {
@@ -40,15 +45,25 @@ export default class MapComponent extends React.Component {
             lng : geoLocation.longitude
         }});
         this.businesses = await this.businessService.searchUsingCoordinates(this.state.mapCenter,this.state.radius,10);
-        this.setState({ "markers" : this.businesses.map(business => MarkerFactory.createMarker(business))});
+        this.setState({ "markers" : this.businesses});
     }
 
     render() {
         return (
-            <div>
-                <MapControls onSearchTextChanged={this.handleSearchChanged} onRadiusChanged={this.handleRadiusChanged}/>
-                <MapView mapCenter={this.state.mapCenter} markers={this.state.markers} zoomLevel={this.state.zoomLevel}/>
+            <div {...this.props}>
+                <div>
+                    <MapControls
+                        onSearchTextChanged={this.handleSearchChanged}
+                        onRadiusChanged={this.handleRadiusChanged} />
+                    <MapView
+                        mapCenter={this.state.mapCenter}
+                        markers={this.state.markers}
+                        zoomLevel={this.state.zoomLevel}
+                        onMarkerSelected={this.handleMarkerSelected}/>
+                </div>
+                <DetailViewComponent selectedItem={this.state.selectedItem}/>
             </div>
+
         );
     }
 }
