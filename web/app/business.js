@@ -4,8 +4,9 @@ export default class Business extends React.Component {
 
     render() {
         return (
-            <div key={this.props.key}>
-                {this.props.name}
+            <div className="item" key={this.props.key}>
+                <div className="header">{this.props.name}</div>
+                <div>{this.props.score}</div>
             </div>
         );
     }

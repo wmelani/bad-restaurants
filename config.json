@@ -1,18 +1,27 @@
 {
-    "database" : {
-      "host" : "localhost",
-      "password" : null,
-      "username" : null,
-      "name" : "badRestaurants",
-      "port" : "27017"
-    },
-    "server": {
-      "port" : 3069,
-      "host" : "localhost",
-      "protocol" : "http",
-      "root" : ""
-    },
-    "paths" : {
-      "static" : "web/dist"
+  "database": {
+    "host": "localhost",
+    "password": null,
+    "username": null,
+    "name": "badRestaurants",
+    "port": "27017"
+  },
+  "server": {
+    "port": 3069,
+    "host": "localhost",
+    "protocol": "http",
+    "root": ""
+  },
+  "paths": {
+    "static": "web/dist",
+    "logs": "logs"
+  },
+  "webapp": {
+    "map": {
+      "latitude": 37.801,
+      "longitude": -122.538,
+      "zoomLevel": 14,
+      "radius": 500
     }
+  }
 }

@@ -31,11 +31,13 @@ module.exports = {
         chunkModules: false
     },
     plugins: [
-        new ExtractTextPlugin("[name].css", {  allChunks: true }), 
+        new ExtractTextPlugin("[name].css", {  allChunks: true }),
         new webpack.optimize.CommonsChunkPlugin("vendor", "[name].js"),
-        new webpack.NoErrorsPlugin()
+        new webpack.NoErrorsPlugin(),
+        new webpack.ProvidePlugin({
+            '$': 'jquery'
+        })
     ],
-
     module: {
         loaders: [
             {
@@ -55,12 +57,12 @@ module.exports = {
                 test: /\.html$/
             },
             {
-                test: /\.sass$/,
-                include: dir_css,
-                loaders: [
-                    'style',
-                    'css'
-                ]
+                test: /\.s?css$/,
+                loaders: ["style", "css?sourceMap", "sass?sourceMap"]
+            },
+            {
+                test: /\.json$/,
+                loader: 'json-loader'
             }
         ]
     }

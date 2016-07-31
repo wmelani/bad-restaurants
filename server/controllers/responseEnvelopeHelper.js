@@ -1,9 +1,11 @@
 
 function buildErrorEnvelope(error,httpStatus){
-    return __buildEnvelope(
-            [error.message + "\n\n\n\n" + error.stack],//todo: not show stack if not debugging
-            httpStatus ? httpStatus : 500)
-        ;
+    var formattedError = error.message;
+    if(process.env.NODE_ENV === "Debug"){
+        formattedError += "\n\n\n\n" + error.stack;
+    }
+
+    return __buildEnvelope([formattedError],httpStatus ? httpStatus : 500);
 }
 function buildSingleResponseEnvelope(obj,httpStatus){
     return __buildEnvelope(undefined,httpStatus ? httpStatus : 200,obj);
