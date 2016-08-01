@@ -1,6 +1,7 @@
 import React from "react";
 import DetailViewLinks from "./detail-view-links";
 import { default as Moment } from 'moment';
+import { default as _ } from 'lodash';
 export default class DetailViewComponent extends React.Component {
 
     constructor(){
@@ -8,24 +9,51 @@ export default class DetailViewComponent extends React.Component {
     }
 
     render() {
+
         if (this.props.selectedItem == null){
-            return <div></div>;
+            return <div>
+                <p>No known violations!e</p>
+            </div>
         }
+        let formattedViolations =
+                _(this.props.selectedItem.violations)
+                    .orderBy(violation => new Moment(violation.date),"desc")
+                    .groupBy(violation => new Moment(violation.date).format('MM/DD/YY'))
+                    .map(violationGroup => {
+                        console.log("here",violationGroup);
+                       return (
+                       <div className="ui card">
+                           <div className="content">
+                               <div className="header">{new Moment(violationGroup[0].date).format('MM/DD/YY')}</div>
+                               <div className="meta">{this.getInspectionForDate(violationGroup[0].date).type}</div>
+                               <div className="description">
+                                   {violationGroup.map(violation => {
+                                       return <p key={violation._id}>{violation.description}</p>
+                                   })}
+                               </div>
+                           </div>
+                           <div className="extra content">
+                               <i className="check icon"></i>
+                               {this.getInspectionForDate(violationGroup[0].date).score}
+                           </div>
+                       </div>
+                       )
+                    });
         return (
             <div {...this.props}>
                 <DetailViewLinks/>
                 <div>
-                    <h3>{this.props.selectedItem.name}</h3>
+                    <h1 className="ui header">{this.props.selectedItem.name}</h1>
                     Score : { this.props.selectedItem.currentScore}
-
-                    {this.props.selectedItem.violations.map(violation => {
-                        return (<div>
-                                    <div>{new Moment(violation.date).format('MM/DD/YYYY')}</div>
-                                    <div>{violation.description}</div>
-                                </div>)
-                    })}
+                        <div className="ui cards">
+                            {formattedViolations.value()}
+                            </div>
                 </div>
             </div>
         );
+    }
+
+    getInspectionForDate(date) {
+        return _.find(this.props.selectedItem.inspections,inspection => inspection.date === date);
     }
 }

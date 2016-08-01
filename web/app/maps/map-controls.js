@@ -7,7 +7,7 @@ export default class MapControls extends React.Component {
     }
     render() {
         return (
-            <div className="ui container">
+            <div {...this.props}>
                 <div className="ui input">
                     <input type="text" onChange={this.props.onSearchTextChanged} placeholder="Enter a location..."/>
                 </div>

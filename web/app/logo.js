@@ -4,7 +4,7 @@ export default class Logo extends React.Component {
 
     render() {
         return (
-            <div>
+            <div {...this.props}>
                 <h2 className="ui header">Bad Restaurants</h2>
             </div>
         );

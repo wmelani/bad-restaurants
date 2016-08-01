@@ -36,7 +36,6 @@ export default class MapComponent extends React.Component {
     handleMarkerSelected(e){
         console.log("marker selected",e);
         this.setState({"selectedItem" : e});
-        debugger;
     }
     async componentDidMount(){
         var geoLocation = await GeoLocationResolver.getGeoLocation();
@@ -51,17 +50,20 @@ export default class MapComponent extends React.Component {
     render() {
         return (
             <div {...this.props}>
-                <div>
-                    <MapControls
+                <div className="ui grid">
+                    <MapControls className="left aligned sixteen wide column"
                         onSearchTextChanged={this.handleSearchChanged}
                         onRadiusChanged={this.handleRadiusChanged} />
-                    <MapView
+                    <MapView className="twelve wide column"
+                         styling={config.map.styling}
                         mapCenter={this.state.mapCenter}
                         markers={this.state.markers}
                         zoomLevel={this.state.zoomLevel}
                         onMarkerSelected={this.handleMarkerSelected}/>
+                    <DetailViewComponent
+                        className="four wide column"
+                        selectedItem={this.state.selectedItem}/>
                 </div>
-                <DetailViewComponent selectedItem={this.state.selectedItem}/>
             </div>
 
         );

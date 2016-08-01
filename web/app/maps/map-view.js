@@ -14,7 +14,7 @@ export default class MapView extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.handleWindowResize = _.throttle(::this.handleWindowResize, 500);
-    }
+     }
 
     componentDidMount() {
         window.addEventListener("resize", this.handleWindowResize);
@@ -36,11 +36,10 @@ export default class MapView extends React.Component {
 
     render() {
         return (
-            <div>
+            <div {...this.props}>
                 <GoogleMapLoader
                     containerElement={
               <div
-                {...this.props}
                 style={{
                   height: "650px", width:"100%"
                 }}
@@ -51,6 +50,10 @@ export default class MapView extends React.Component {
                 ref={(map) => (this._googleMapComponent = map)}
                 defaultZoom={this.props.zoomLevel}
                 center={this.props.mapCenter}
+                defaultOptions={{
+                    styles: this.props.styling
+                }}
+
               >
                 {this.props.markers.map((marker) => {
                     var formattedMarker = MarkerFactory.createMarker(marker);
