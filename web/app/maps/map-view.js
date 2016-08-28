@@ -7,6 +7,9 @@ import { triggerEvent } from "react-google-maps/lib/utils";
 
 import MarkerFactory from './factories/marker-factory';
 import { default as raf } from "raf";
+import * as utilities from '../utilities';
+
+const MAP_VARIANCE = 0.00000000001000;
 export default class MapView extends React.Component {
 
 
@@ -14,14 +17,14 @@ export default class MapView extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.handleWindowResize = _.throttle(::this.handleWindowResize, 500);
+        this.handleMapMoved = _.throttle(::this.handleMapMoved,2500);
+        this.handleZoomLevelChanged = this.handleZoomLevelChanged.bind(this);
      }
 
     componentDidMount() {
-        window.addEventListener("resize", this.handleWindowResize);
     }
 
     componentWillUnmount() {
-        window.removeEventListener("resize", this.handleWindowResize);
     }
 
     handleWindowResize() {
@@ -32,18 +35,54 @@ export default class MapView extends React.Component {
             this.props.onMarkerSelected(marker);
         }
     }
+    handleZoomLevelChanged(){
+        var zoomLevel = this._googleMapComponent.getZoom();
+        console.log(zoomLevel);
+    }
+    handleMapMoved(){
+        if (typeof this.props.onCenterChanged === "function"){
+            var center = this._googleMapComponent.getCenter();
+            var lat = center.lat();
+            var lng = center.lng();
+            if (this.wasMapMovedSufficientlyFar(lat,lng)){
+                console.log("moved far");
+                this.props.onCenterChanged({ lat : lat, lng : lng });
+            }else {
+                console.log("map was not moved far enough.");
+            }
 
+        }
+    }
+
+    wasMapMovedSufficientlyFar(lat,lng){
+        return !utilities.approximatelyEqual(this.props.mapCenter.lat,lat,MAP_VARIANCE)
+            || !utilities.approximatelyEqual(this.props.mapCenter.lng,lng,MAP_VARIANCE);
+    }
+
+    shouldComponentUpdate(nextProps) {
+        var shouldUpdate = !_.isEqual(this.props.markers,nextProps.markers);
+        console.log("should update: " + shouldUpdate);
+        return shouldUpdate;
+    }
 
     render() {
+        console.log("rendering mapview");
+        const divProps = {...this.props};
+        delete divProps.mapCenter;
+        delete divProps.styling;
+        delete divProps.markers;
+        delete divProps.zoomLevel;
+        delete divProps.onMarkerSelected;
+        delete divProps.onCenterChanged;
         return (
-            <div {...this.props}>
+            <div {...divProps}>
                 <GoogleMapLoader
                     containerElement={
               <div
                 style={{
                   height: "650px", width:"100%"
                 }}
-              />
+              ></div>
             }
                 googleMapElement={
               <GoogleMap
@@ -53,6 +92,9 @@ export default class MapView extends React.Component {
                 defaultOptions={{
                     styles: this.props.styling
                 }}
+                onCenterChanged={this.handleMapMoved}
+                onZoomChanged={this.handleZoomLevelChanged}
+                
 
               >
                 {this.props.markers.map((marker) => {

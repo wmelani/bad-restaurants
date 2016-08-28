@@ -13,7 +13,7 @@ export default class GeoLocationResolver {
         }
         return new Promise((resolve,reject) => {
             navigator.geolocation.getCurrentPosition(position => {
-                    console.log(position.coords);
+                    console.log("received current position",position.coords);
                     resolve(position.coords);
                 },
                 reason => {

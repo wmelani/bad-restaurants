@@ -6,14 +6,19 @@ export default class MapControls extends React.Component {
         super();
     }
     render() {
+        const divProps = {...this.props};
+        delete divProps.onSearchTextChanged;
+        delete divProps.onRadiusChanged;
+        delete divProps.radiusValue;
         return (
-            <div {...this.props}>
+
+            <div {...this.divProps}>
                 <div className="ui input">
                     <input type="text" onChange={this.props.onSearchTextChanged} placeholder="Enter a location..."/>
                 </div>
 
                 <input type="range" onChange={this.props.onRadiusChanged}
-                       min="0" max="1000" value={this.props.radiusValue} step="5"
+                       min="1" max="100" value={this.props.radiusValue} step="1"
                 />
 
             </div>

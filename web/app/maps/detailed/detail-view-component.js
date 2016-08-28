@@ -12,7 +12,7 @@ export default class DetailViewComponent extends React.Component {
 
         if (this.props.selectedItem == null){
             return <div>
-                <p>No known violations!e</p>
+                <p>No known violations!</p>
             </div>
         }
         let formattedViolations =
@@ -39,8 +39,10 @@ export default class DetailViewComponent extends React.Component {
                        </div>
                        )
                     });
+        const divProps = {...this.props};
+        delete divProps.selectedItem;
         return (
-            <div {...this.props}>
+            <div {...divProps}>
                 <DetailViewLinks/>
                 <div>
                     <h1 className="ui header">{this.props.selectedItem.name}</h1>

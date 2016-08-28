@@ -9,10 +9,7 @@ var dir_css = path.resolve(__dirname, 'css');
 var dir_build = path.resolve(__dirname, 'dist');
 var globalConfig = require("../config");
 module.exports = {
-    entry: {
-      app : path.resolve(__dirname, 'index.js'),
-      vendor : ["react","react-dom"]
-    },
+    entry: ['react-hot-loader/patch',path.resolve(__dirname, 'index.js'),"react","react-dom"],
     output: {
         path: dir_build,
         filename: 'bundle.js'
@@ -25,7 +22,7 @@ module.exports = {
         proxy: {
             "/api*" : globalConfig.server.protocol + "://" + globalConfig.server.host + ":" + globalConfig.server.port + globalConfig.server.root
         }
-    }, 
+    },
     stats: {
         colors: true,
         chunkModules: false
@@ -45,12 +42,10 @@ module.exports = {
                 test: /\.png($|\?)|\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/
             },
             {
-                loader: 'babel-loader',
                 test: /\.js($|\?)|\.jsx($|\?)/,
                 exclude: /node_modules/,
-                query : {
-                    presets : ['stage-0','es2015', 'react']
-                }
+                loaders : ["babel"]
+
             },
             {
                 loader: 'file?name=/[name].html',
@@ -65,6 +60,6 @@ module.exports = {
                 loader: 'json-loader'
             }
         ]
-    }
-
+    },
+    devtool: "#inline-source-map"
 };

@@ -1,15 +1,32 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import MapComponent from "./maps/map-component";
-import Logo from './logo'
+import { AppContainer } from 'react-hot-loader';
+import configureStore from './store/configureStore';
+import Root from './containers/Root';
 
-ReactDOM.render(
-        <div>
+const store = configureStore();
 
-            <div className="ui grid">
-                <Logo className="sixteen wide column"/>
-                <div className="two wide column"></div>
-                <MapComponent className="fourteen wide column"/>
-            </div>
-        </div>
-    , document.getElementById("application"));
+const rootEl = document.getElementById("application");
+
+const render = () => {
+    ReactDOM.render(
+        <AppContainer>
+            <Root store={ store }/>
+        </AppContainer>
+        , rootEl);
+
+    if (module.hot) {
+        module.hot.accept('./App', () => {
+            // If you use Webpack 2 in ES modules mode, you can
+            // use <App /> here rather than require() a <NextApp />.
+            const NextApp = require('./containers/Root').default;
+            ReactDOM.render(
+                <AppContainer>
+                    <NextApp />
+                </AppContainer>,
+                rootEl
+            );
+        });
+    }
+};
+render();
