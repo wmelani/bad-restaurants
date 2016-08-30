@@ -2,113 +2,76 @@ import React from "react";
 
 import { default as _ } from "lodash";
 
-import { GoogleMapLoader, GoogleMap, Marker } from "react-google-maps";
-import { triggerEvent } from "react-google-maps/lib/utils";
+import shouldPureComponentUpdate from 'react-pure-render/function';
 
-import MarkerFactory from './factories/marker-factory';
-import { default as raf } from "raf";
+import GoogleMap from 'google-map-react';
+
 import * as utilities from '../utilities';
 
+import { default as config } from '../../config.json';
+
+import MapPinFactory from "./factories/map-pin-factory";
+
 const MAP_VARIANCE = 0.00000000001000;
+
 export default class MapView extends React.Component {
 
 
 
     constructor(props, context) {
         super(props, context);
-        this.handleWindowResize = _.throttle(::this.handleWindowResize, 500);
-        this.handleMapMoved = _.throttle(::this.handleMapMoved,2500);
-        this.handleZoomLevelChanged = this.handleZoomLevelChanged.bind(this);
+        this.onChange= _.throttle(::this.onChange,500);
+        this.defaultZoom = config.map.zoomLevel;
+        this.defaultMapCenter = { lat : config.map.latitude, lng : config.map.longitude};
+        this.currentZoom = this.defaultZoom;
+
      }
 
-    componentDidMount() {
-    }
-
-    componentWillUnmount() {
-    }
-
-    handleWindowResize() {
-        triggerEvent(this._googleMapComponent, "resize");
-    }
-    markerClicked(marker){
-        if (typeof this.props.onMarkerSelected === "function"){
-            this.props.onMarkerSelected(marker);
+    onChange(changes){
+        debugger;
+        if (this.currentZoom != changes.zoom){
+            this.props.onZoomChanged(changes.zoom);
         }
-    }
-    handleZoomLevelChanged(){
-        var zoomLevel = this._googleMapComponent.getZoom();
-        console.log(zoomLevel);
-    }
-    handleMapMoved(){
-        if (typeof this.props.onCenterChanged === "function"){
-            var center = this._googleMapComponent.getCenter();
-            var lat = center.lat();
-            var lng = center.lng();
-            if (this.wasMapMovedSufficientlyFar(lat,lng)){
-                console.log("moved far");
-                this.props.onCenterChanged({ lat : lat, lng : lng });
-            }else {
-                console.log("map was not moved far enough.");
-            }
-
+        this.currentZoom = changes.zoom;
+        if (!this.props.onCenterChanged) { return; }
+        var {lat, lng} = changes.center;
+        if (this.wasMapMovedSufficientlyFar(lat,lng)){
+            console.log("moved far");
+            this.props.onCenterChanged(changes.center);
         }
+
     }
 
     wasMapMovedSufficientlyFar(lat,lng){
-        return !utilities.approximatelyEqual(this.props.mapCenter.lat,lat,MAP_VARIANCE)
-            || !utilities.approximatelyEqual(this.props.mapCenter.lng,lng,MAP_VARIANCE);
+        return this.props.mapCenter &&
+            (!utilities.approximatelyEqual(this.props.mapCenter.lat,lat,MAP_VARIANCE)
+            || !utilities.approximatelyEqual(this.props.mapCenter.lng,lng,MAP_VARIANCE));
     }
 
-    shouldComponentUpdate(nextProps) {
-        var shouldUpdate = !_.isEqual(this.props.markers,nextProps.markers);
-        console.log("should update: " + shouldUpdate);
-        return shouldUpdate;
-    }
+    shouldComponentUpdate = shouldPureComponentUpdate;
 
+    getMarkers(){
+        return this.props.markers.map(marker => {
+            return MapPinFactory.createMapPin(marker,this.props.onMarkerSelected.bind(this,marker));
+        });
+    }
     render() {
-        console.log("rendering mapview");
         const divProps = {...this.props};
-        delete divProps.mapCenter;
-        delete divProps.styling;
         delete divProps.markers;
-        delete divProps.zoomLevel;
         delete divProps.onMarkerSelected;
         delete divProps.onCenterChanged;
         return (
-            <div {...divProps}>
-                <GoogleMapLoader
-                    containerElement={
-              <div
-                style={{
-                  height: "650px", width:"100%"
-                }}
-              ></div>
-            }
-                googleMapElement={
-              <GoogleMap
-                ref={(map) => (this._googleMapComponent = map)}
-                defaultZoom={this.props.zoomLevel}
-                center={this.props.mapCenter}
-                defaultOptions={{
-                    styles: this.props.styling
-                }}
-                onCenterChanged={this.handleMapMoved}
-                onZoomChanged={this.handleZoomLevelChanged}
-                
-
+              <GoogleMap  className="sixteen wide column" style={{height : "700px"}}
+                defaultZoom={this.defaultZoom}
+                defaultCenter={this.defaultMapCenter}
+                options={{ styles : config.map.styling}}
+                onChange={this.onChange}
               >
-                {this.props.markers.map((marker) => {
-                    var formattedMarker = MarkerFactory.createMarker(marker);
-                  return (
-                    <Marker onClick={this.markerClicked.bind(this,marker)}
-                      {...formattedMarker}
-                    />
-                  );
-                })}
+                  {this.getMarkers()}
               </GoogleMap>
-            }
-                />
-                </div>
         );
     }
 }
+
+
+

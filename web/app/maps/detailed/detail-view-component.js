@@ -2,14 +2,10 @@ import React from "react";
 import DetailViewLinks from "./detail-view-links";
 import { default as Moment } from 'moment';
 import { default as _ } from 'lodash';
+
 export default class DetailViewComponent extends React.Component {
 
-    constructor(){
-        super();
-    }
-
     render() {
-
         if (this.props.selectedItem == null){
             return <div>
                 <p>No known violations!</p>

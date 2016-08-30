@@ -31,7 +31,7 @@ export function fetchBusinesses(mapCenter,radius,limit){
 
 export function pinClicked(pin){
     return function(dispatch){
-        dispatch({ type: ActionType.PIN_CLICKED,value : pin});
+        dispatch({ type: ActionType.PIN_SELECTED,value : pin});
     }
 }
 export function onCenterChanged(center){
@@ -40,4 +40,9 @@ export function onCenterChanged(center){
         fetchBusinesses(center,500,50)(dispatch);
         dispatch({type: ActionType.CENTER_CHANGED, value : center});
     };
+}
+export function onZoomChanged(zoomLevel){
+    return function(dispatch){
+        dispatch({type: ActionType.ZOOM_CHANGED, value : zoomLevel});
+    }
 }

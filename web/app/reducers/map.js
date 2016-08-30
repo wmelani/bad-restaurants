@@ -1,4 +1,4 @@
-import { SEARCH_TEXT_CHANGED, SEARCH, PIN_CLICKED, RADIUS_CHANGED, MAP_CENTER_CHANGED, CENTER_CHANGED} from '../constants/ActionTypes'
+import { SEARCH_TEXT_CHANGED, SEARCH, RADIUS_CHANGED, MAP_CENTER_CHANGED, CENTER_CHANGED, ZOOM_CHANGED} from '../constants/ActionTypes'
 
 var config = require("../../config.json");
 
@@ -23,11 +23,6 @@ export default function map(state = initialState, action) {
             return state.filter(todo =>
                 todo.id !== action.id
             );
-        case PIN_CLICKED:
-            return {
-                ...state,
-                selectedItem : action.value
-            };
         case RADIUS_CHANGED:
             return {
                 ...state,
@@ -46,6 +41,11 @@ export default function map(state = initialState, action) {
                     lng : action.value.lng
                 }
             };
+        case ZOOM_CHANGED:
+            return {
+                ...state,
+                zoomLevel : action.value
+            }
         default:
             return state;
     }
