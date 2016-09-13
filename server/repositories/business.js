@@ -9,8 +9,7 @@ function * findById(id) {
         throw new Error("id is not in a valid format", id);
     }
     try {
-        var result = yield Q.nfcall(app.models.Business.findById.bind(app.models.Business), id);
-        return result;
+        return yield Q.nfcall(app.models.Business.findById.bind(app.models.Business), id);
     }
     catch (e) {
         app.logger.error("Error finding by id", e);
@@ -30,15 +29,17 @@ function * search(params) {
         throw new Error("Radius must be greater than 0");
     }
     try {
-        var result = yield Q.nfcall(app.models.Business.find.bind(app.models.Business),
-            {
-                "location.coordinates": {
-                    '$near': {
-                        '$maxDistance': params.radius,
-                        '$geometry': {type: 'Point', coordinates: [params.long, params.lat]}
-                    }
+        var query = app.models.Business.find( {
+            "location.coordinates": {
+                '$near': {
+                    '$maxDistance': params.radius,
+                    '$geometry': {type: 'Point', coordinates: [params.long, params.lat]}
                 }
-            });
+            }
+        }).limit(params.limit);
+
+        var result = yield Q.nfcall(query.exec.bind(query));
+        console.log(result.length);
         app.logger.info("Found " + result.length + " results for search with params " + JSON.stringify(params, null, 4));
 
         return result;

@@ -45,7 +45,7 @@ export default function map(state = initialState, action) {
             return {
                 ...state,
                 zoomLevel : action.value
-            }
+            };
         default:
             return state;
     }

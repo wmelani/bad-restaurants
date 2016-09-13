@@ -2,8 +2,8 @@ function searchBusinesses(params){
     var defaults = { //todo: put in config file
         "lat" : undefined,
         "long" : undefined,
-        "radius" : 500
-        //todo: add paging parameters
+        "radius" : 500,
+        "limit" : 25
     };
 
     var keys = Object.keys(defaults);
