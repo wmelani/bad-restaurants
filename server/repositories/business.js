@@ -35,8 +35,44 @@ function * search(params) {
                     '$maxDistance': params.radius,
                     '$geometry': {type: 'Point', coordinates: [params.long, params.lat]}
                 }
-            }
+            },
+            "currentScore" : { $gte : params.minimum, $lte : params.maximum}
+
         }).limit(params.limit);
+
+        var result = yield Q.nfcall(query.exec.bind(query));
+        console.log(result.length);
+        app.logger.info("Found " + result.length + " results for search with params " + JSON.stringify(params, null, 4));
+
+        return result;
+    }
+    catch (e) {
+
+        app.logger.error("Error searching for businesses", e);
+        throw e;
+    }
+}
+
+function * searchByName(params) {
+    if (params.name == undefined) {
+        app.logger.error("Name is required");
+        throw new Error("Name is required");
+    }
+    try {
+
+        var query = app.models.Business.aggregate( [
+            // Stage 1
+            {
+                $match: { '$text': { '$search': params.name } }
+            },
+
+            // Stage 2
+            {
+                $sort: { score : {$meta:'textScore'}}
+            },
+            //Stage 3
+            { $limit : parseInt(params.limit,10) }
+        ]);
 
         var result = yield Q.nfcall(query.exec.bind(query));
         console.log(result.length);
@@ -54,3 +90,4 @@ function * search(params) {
 module.exports = exports;
 exports.findById = findById;
 exports.search = search;
+exports.searchByName = searchByName;

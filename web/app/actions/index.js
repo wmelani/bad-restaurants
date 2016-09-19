@@ -16,15 +16,39 @@ export function getGeoLocation(){
     };
 
 }
-export function fetchBusinesses(mapCenter,radius,limit){
+export function fetchBusinesses(mapCenter,radius,minValue,maxValue,limit){
     return async function(dispatch) {
-
+        dispatch({type: ActionType.FETCHING_BUSINESSES});
         const businessService = new BusinessService();
-        let businesses = await businessService.searchUsingCoordinates(
-            mapCenter,
-            radius,
-            limit);
-        dispatch({ type: ActionType.FETCHED_BUSINESSES, value : businesses});
+        try {
+            let businesses = await businessService.searchUsingCoordinates(
+                mapCenter,
+                500,
+                minValue,
+                maxValue,
+                limit);
+            dispatch({ type: ActionType.FETCHED_BUSINESSES, value : businesses});
+        }
+        catch(e){
+            dispatch({type: ActionType.FETCH_BUSINESSES_ERROR, value : e});
+        }
+
+    };
+
+}
+
+export function searchBusinessesByName(name,limit){
+    return async function(dispatch) {
+        dispatch({type: ActionType.FETCHING_BUSINESSES});
+        const businessService = new BusinessService();
+        try {
+            let businesses = await businessService.searchByName(name,limit);
+            dispatch({ type: ActionType.FETCHED_BUSINESSES, value : businesses});
+        }
+        catch(e){
+            dispatch({type: ActionType.FETCH_BUSINESSES_ERROR, value : e});
+        }
+
     };
 
 }
@@ -36,13 +60,35 @@ export function pinClicked(pin){
 }
 export function onCenterChanged(center){
 
-    return function(dispatch){
-        fetchBusinesses(center,500,50)(dispatch);
+    return function(dispatch,getState){
         dispatch({type: ActionType.CENTER_CHANGED, value : center});
+        const state = getState();
+        fetchBusinesses(center,500,state.view.minimumFilter,state.view.maximumFilter,25)(dispatch,getState);
+
     };
 }
 export function onZoomChanged(zoomLevel){
     return function(dispatch){
         dispatch({type: ActionType.ZOOM_CHANGED, value : zoomLevel});
+    }
+}
+export function onMaximumFilterChanged(e){
+    return function(dispatch){
+        dispatch({type : ActionType.MAXIMUM_FILTER_CHANGED, value : e})
+    }
+}
+export function onMinimumFilterChanged(e){
+    return function(dispatch){
+        dispatch({type : ActionType.MINIMUM_FILTER_CHANGED, value : e})
+    }
+}
+export function handleSearchChanged(e){
+    return function(dispatch,getState){
+        dispatch({type: ActionType.SEARCH_TEXT_CHANGED, value : e});
+        if (e.length > 2){
+            dispatch({type : ActionType.SEARCH, value : e});
+            const state = getState();
+            searchBusinessesByName(e,25)(dispatch,state);
+        }
     }
 }

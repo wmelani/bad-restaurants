@@ -8,6 +8,7 @@ export default class GeoLocationResolver {
         }
     }
     static async getGeoLocation(){
+
         if (!navigator.geolocation){
             throw new Error("Geolocation is not enabled.");
         }

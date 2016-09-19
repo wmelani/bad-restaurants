@@ -3,18 +3,22 @@ function searchBusinesses(params){
         "lat" : undefined,
         "long" : undefined,
         "radius" : 500,
-        "limit" : 25
+        "limit" : 25,
+        "minimum" : 0,
+        "maximum" : 100
     };
 
-    var keys = Object.keys(defaults);
-    var result = {};
-    for (var j = 0; j < keys.length; j++){
-        var key = keys[j];
-        result[key] = params[key] == undefined ? defaults[key] : params[key];
-    }
-    return result;
+    return Object.assign({},defaults, params);
 }
+function searchBusinessesByName(params){
+    var defaults = {
+        "limit" : 25,
+        "name" : undefined
+    };
 
+    return Object.assign({},defaults, params);
+}
 
 module.exports = exports;
 exports.searchBusinesses = searchBusinesses;
+exports.searchBusinessesByName = searchBusinessesByName;

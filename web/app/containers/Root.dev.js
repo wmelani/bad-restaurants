@@ -11,12 +11,12 @@ export default class Root extends Component {
         delete divProps.store;
         return (
             <Provider store={store}>
-                <div className="ui grid" {...divProps}>
-                    <Logo className="sixteen wide column"/>
-                    <MapComponent className="eleven wide column"/>
-                    <DevTools className="sixteen wide column"/>
+                <div style={{width: "100%", "height" : "100%"}}>
+                    <MapComponent/>
+
                 </div>
             </Provider>
         );
+        // <DevTools className="ui right floated"/>
     }
 }

@@ -6,34 +6,38 @@ import { connect } from 'react-redux';
 
 import * as actions from '../actions';
 
-import {
-    RADIUS_CHANGED,
-    SEARCH_TEXT_CHANGED
-} from '../constants/ActionTypes';
-
 class MapComponent extends React.Component {
 
     constructor(){
         super();
-        this.handleRadiusChanged = this.handleRadiusChanged.bind(this);
-        this.handleSearchChanged = this.handleSearchChanged.bind(this);
+        this.handleSearchChanged = //_.throttle(::this.handleSearchChanged,2500);
+                                    this.handleSearchChanged.bind(this);
+        this.handleSearchChangedImpl = _.throttle(::this.handleSearchChangedImpl,500);
         this.handleCenterChanged = _.throttle(::this.handleCenterChanged,2500);
-        
-    }
-
-    handleRadiusChanged(e){
-        this.props.dispatch({ type : RADIUS_CHANGED, value: Number.parseInt(e.target.value,10)});
-
+        this.handleMinimumFilterChanged = _.throttle(::this.handleMinimumFilterChanged,2500);
+        this.handleMaximumFilterChanged = _.throttle(::this.handleMaximumFilterChanged,2500);
     }
     handleSearchChanged(e){
-        this.props.dispatch({ type : SEARCH_TEXT_CHANGED, value : e.target.value});
+        const value = e.target.value;
+        //this call is throttled.
+        this.handleSearchChangedImpl(value);
+    }
+    handleSearchChangedImpl(value){
+        this.props.handleSearchChanged(value);
+    }
+    handleMinimumFilterChanged(e,value){
+        this.props.onMinimumFilterChanged(value);
+    }
+    handleMaximumFilterChanged(e,value){
+        this.props.onMaximumFilterChanged(value);
+        
     }
     handleCenterChanged(e){
         this.props.onCenterChanged(e);
     }
     async componentDidMount(){
        this.props.getGeoLocation();
-       this.props.fetchBusinesses(this.props.map.mapCenter,this.props.map.radius,10);
+       this.props.fetchBusinesses(this.props.map.mapCenter,this.props.map.zoomLevel,this.props.minimumFilter,this.props.maximumFilter,10);
     }
     render() {
         let divProps = {...this.props};
@@ -46,21 +50,22 @@ class MapComponent extends React.Component {
         delete divProps.onCenterChanged;
         delete divProps.selectedItem;
         return (
-            <div {...divProps}>
-                <div className="ui grid">
-                    <MapControls className="left aligned sixteen wide column"
+                <div id="map-page" className="ui grid">
+                    <MapControls className="three wide column"
                         onSearchTextChanged={this.handleSearchChanged}
-                        onRadiusChanged={this.handleRadiusChanged} />
-                    <MapView className="twelve wide column"
+                         minimumFilterValue={this.props.minimumFilter}
+                         maximumFilterValue={this.props.maximumFilter}
+                         onMaximumFilterChanged={this.handleMaximumFilterChanged}
+                        onMinimumFilterChanged={this.handleMinimumFilterChanged} />
+                    <MapView className="middle aligned nine wide column"
                         markers={this.props.businesses}
                          mapCenter={this.props.map.mapCenter}
                         onMarkerSelected={this.props.pinClicked}
                         onCenterChanged={this.handleCenterChanged}
                         onZoomChanged={this.props.onZoomChanged}/>
-                    <DetailViewComponent selectedItem={this.props.selectedItem} />
+                    <DetailViewComponent className="four wide column" selectedItem={this.props.selectedItem} />
 
                 </div>
-            </div>
 
         );
     }
@@ -72,7 +77,9 @@ function mapStateToProps(state) {
     return {
         map: state.map,
         businesses : state.data.businesses,
-        selectedItem : state.view.selectedItem
+        selectedItem : state.view.selectedItem,
+        minimumFilter : state.view.minimumFilter,
+        maximumFilter : state.view.maximumFilter
     }
 }
 export default connect(mapStateToProps,actions)(MapComponent);
