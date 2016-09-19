@@ -28,7 +28,6 @@ export default class MapView extends React.Component {
      }
 
     onChange(changes){
-        debugger;
         if (this.currentZoom != changes.zoom){
             this.props.onZoomChanged(changes.zoom);
         }
@@ -61,7 +60,8 @@ export default class MapView extends React.Component {
         delete divProps.onMarkerSelected;
         delete divProps.onCenterChanged;
         return (
-              <GoogleMap  className="sixteen wide column" style={{height : "700px"}}
+            <div id="map-view" {...divProps}>
+              <GoogleMap
                 defaultZoom={this.defaultZoom}
                 defaultCenter={this.defaultMapCenter}
                 options={{ styles : config.map.styling}}
@@ -69,6 +69,7 @@ export default class MapView extends React.Component {
               >
                   {this.getMarkers()}
               </GoogleMap>
+            </div>
         );
     }
 }

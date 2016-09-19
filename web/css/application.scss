@@ -1,4 +1,21 @@
+
 #application {
-  height: 400px;
-  color : black;
+    height: 100%;
+    width: 100%;
+}
+#map-controls-desktop {
+    background-color: rgba(27, 28, 29,.9);
+}
+#map-controls-desktop > .ui.input {
+    margin:1em;
+}
+#map-view{
+    height: 100%;
+    width: 100%;
+    padding : 0;
+    margin: 0;
+}
+#map-page{
+    height: 100%;
+    width: 100%;
 }

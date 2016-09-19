@@ -16,7 +16,6 @@ export default class DetailViewComponent extends React.Component {
                     .orderBy(violation => new Moment(violation.date),"desc")
                     .groupBy(violation => new Moment(violation.date).format('MM/DD/YY'))
                     .map(violationGroup => {
-                        console.log("here",violationGroup);
                        return (
                        <div className="ui card">
                            <div className="content">
