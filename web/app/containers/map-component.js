@@ -3,6 +3,7 @@ import MapControls from '../maps/map-controls';
 import MapView from '../maps/map-view';
 import DetailViewComponent from '../maps/detailed/detail-view-component';
 import { connect } from 'react-redux';
+import { Grid } from 'semantic-ui-react';
 
 import * as actions from '../actions';
 
@@ -14,8 +15,7 @@ class MapComponent extends React.Component {
                                     this.handleSearchChanged.bind(this);
         this.handleSearchChangedImpl = _.throttle(::this.handleSearchChangedImpl,500);
         this.handleCenterChanged = _.throttle(::this.handleCenterChanged,2500);
-        this.handleMinimumFilterChanged = _.throttle(::this.handleMinimumFilterChanged,2500);
-        this.handleMaximumFilterChanged = _.throttle(::this.handleMaximumFilterChanged,2500);
+        this.handleFilterRangeChanged = _.throttle(::this.handleFilterRangeChanged,2500);
     }
     handleSearchChanged(e){
         const value = e.target.value;
@@ -25,12 +25,8 @@ class MapComponent extends React.Component {
     handleSearchChangedImpl(value){
         this.props.handleSearchChanged(value);
     }
-    handleMinimumFilterChanged(e,value){
-        this.props.onMinimumFilterChanged(value);
-    }
-    handleMaximumFilterChanged(e,value){
-        this.props.onMaximumFilterChanged(value);
-        
+    handleFilterRangeChanged(value){
+        this.props.onFilterRangeChanged(value);
     }
     handleCenterChanged(e){
         this.props.onCenterChanged(e);
@@ -50,22 +46,33 @@ class MapComponent extends React.Component {
         delete divProps.onCenterChanged;
         delete divProps.selectedItem;
         return (
-                <div id="map-page" className="ui grid">
-                    <MapControls className="three wide column"
-                        onSearchTextChanged={this.handleSearchChanged}
-                         minimumFilterValue={this.props.minimumFilter}
-                         maximumFilterValue={this.props.maximumFilter}
-                         onMaximumFilterChanged={this.handleMaximumFilterChanged}
-                        onMinimumFilterChanged={this.handleMinimumFilterChanged} />
-                    <MapView className="middle aligned nine wide column"
-                        markers={this.props.businesses}
-                         mapCenter={this.props.map.mapCenter}
-                        onMarkerSelected={this.props.pinClicked}
-                        onCenterChanged={this.handleCenterChanged}
-                        onZoomChanged={this.props.onZoomChanged}/>
-                    <DetailViewComponent className="four wide column" selectedItem={this.props.selectedItem} />
+            <Grid id="map-page">
+                <Grid.Column width={3}
+                    style={{height:'100%', 'padding': 0}}
+                >
 
-                </div>
+                    <MapControls
+                                 onSearchTextChanged={this.handleSearchChanged}
+                                 onFilterRangeChanged={this.handleFilterRangeChanged} />
+
+                </Grid.Column>
+                <Grid.Column width={9} style={{'padding' : 0}}>
+
+                    <MapView
+                             markers={this.props.businesses}
+                             mapCenter={this.props.map.mapCenter}
+                             onMarkerSelected={this.props.pinClicked}
+                             onCenterChanged={this.handleCenterChanged}
+                             onZoomChanged={this.props.onZoomChanged}/>
+
+                </Grid.Column>
+                <Grid.Column width={4}>
+
+                    <DetailViewComponent
+                        selectedItem={this.props.selectedItem} />
+
+                </Grid.Column>
+            </Grid>
 
         );
     }

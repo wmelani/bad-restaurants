@@ -33,5 +33,5 @@ var business = new Schema({
     "violations" : [ violationModel ]
 });
 business.index({ "location.coordinates" : "2dsphere"});
-
+business.index({ name: "text" });
 exports.BusinessService = mongoose.model('Business', business);

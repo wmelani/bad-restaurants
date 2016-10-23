@@ -1,4 +1,4 @@
-import { PIN_SELECTED, MINIMUM_FILTER_CHANGED, MAXIMUM_FILTER_CHANGED, SEARCH_TEXT_CHANGED } from '../constants/ActionTypes'
+import { PIN_SELECTED, FILTER_RANGE_CHANGED, SEARCH_TEXT_CHANGED } from '../constants/ActionTypes'
 
 const initialState = {
     selectedItem : {},
@@ -13,16 +13,11 @@ export default function view(state = initialState, action) {
                 ...state,
                 selectedItem : action.value
             };
-        case MAXIMUM_FILTER_CHANGED:
+        case FILTER_RANGE_CHANGED:
             return {
                 ...state,
-                maximumFilter : action.value
-            };
-        case MINIMUM_FILTER_CHANGED:
-            console.log(action);
-            return {
-                ...state,
-                minimumFilter : action.value
+                minimumFilter : action.value[0],
+                maximumFilter : action.value[1]
             };
         case SEARCH_TEXT_CHANGED:
             return {

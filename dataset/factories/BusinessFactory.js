@@ -1,10 +1,8 @@
 var businessSchema = require('../../mongo/schema/Business.js');
-
-
-
 var inspectionsFactory = require('./InspectionFactory');
 var violationsFactory = require('./ViolationFactory');
 var dateUtilities = require('../utilities/dateUtilities');
+
 
 function create (business, inspections,violations) {
     var model = {
@@ -60,6 +58,7 @@ function getCurrentScore(inspections){
     }
     return null;
 }
+
 module.exports = exports;
 exports.create = create;
 

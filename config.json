@@ -6,6 +6,13 @@
     "name": "badRestaurants",
     "port": "27017"
   },
+  "apis" : {
+    "google-maps" : "AIzaSyB6qSDY4M1bzRfK0XtUR5Xv-fd4e34SKrM"
+  },
+  "defaults" : {
+      "city" : "San Francisco",
+      "country" : "USA"
+  },
   "server": {
     "port": 3069,
     "host": "localhost",

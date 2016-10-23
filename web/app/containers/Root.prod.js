@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import MapComponent from './map-component';
-import Logo from '../logo'
 export default class Root extends Component {
     render() {
         const { store } = this.props;

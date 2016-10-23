@@ -3,13 +3,17 @@
 
 var path = require('path');
 var webpack = require('webpack');
-var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var dir_js = path.resolve(__dirname, 'app');
 var dir_css = path.resolve(__dirname, 'css');
 var dir_build = path.resolve(__dirname, 'dist');
-var globalConfig = require("../config");
 module.exports = {
-    entry: ['react-hot-loader/patch',path.resolve(__dirname, 'index.js'),"react","react-dom"],
+    entry: [
+        'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
+        'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors,
+        'react-hot-loader/patch',
+        "babel-polyfill",
+        path.resolve(__dirname, 'app/index.js')
+    ],
     output: {
         path: dir_build,
         filename: 'bundle.js'
@@ -17,23 +21,12 @@ module.exports = {
     resolve: {
        modulesDirectories: ['node_modules', dir_js]
     },
-    devServer: {
-        contentBase: dir_build,
-        proxy: {
-            "/api*" : globalConfig.server.protocol + "://" + globalConfig.server.host + ":" + globalConfig.server.port + globalConfig.server.root
-        }
-    },
-    stats: {
-        colors: true,
-        chunkModules: false
-    },
     plugins: [
-        new ExtractTextPlugin("[name].css", {  allChunks: true }),
-        new webpack.optimize.CommonsChunkPlugin("vendor", "[name].js"),
         new webpack.NoErrorsPlugin(),
         new webpack.ProvidePlugin({
             '$': 'jquery'
-        })
+        }),
+        new webpack.HotModuleReplacementPlugin()
     ],
     module: {
         loaders: [
@@ -43,7 +36,9 @@ module.exports = {
             },
             {
                 test: /\.js($|\?)|\.jsx($|\?)/,
-                exclude: /node_modules/,
+                include: [
+                    dir_js
+                ],
                 loaders : ["babel"]
 
             },
@@ -53,7 +48,7 @@ module.exports = {
             },
             {
                 test: /\.s?css$/,
-                loaders: ["style", "css?sourceMap", "sass?sourceMap"]
+                loaders: ["style", "css?sourceMap", "sass?sourceMap"],
             },
             {
                 test: /\.json$/,
@@ -61,5 +56,5 @@ module.exports = {
             }
         ]
     },
-    devtool: "#inline-source-map"
+    devtool: "source-map"
 };

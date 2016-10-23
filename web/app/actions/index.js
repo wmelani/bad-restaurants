@@ -72,14 +72,9 @@ export function onZoomChanged(zoomLevel){
         dispatch({type: ActionType.ZOOM_CHANGED, value : zoomLevel});
     }
 }
-export function onMaximumFilterChanged(e){
+export function onFilterRangeChanged(e){
     return function(dispatch){
-        dispatch({type : ActionType.MAXIMUM_FILTER_CHANGED, value : e})
-    }
-}
-export function onMinimumFilterChanged(e){
-    return function(dispatch){
-        dispatch({type : ActionType.MINIMUM_FILTER_CHANGED, value : e})
+        dispatch({type : ActionType.FILTER_RANGE_CHANGED, value : e})
     }
 }
 export function handleSearchChanged(e){

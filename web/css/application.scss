@@ -1,10 +1,13 @@
-
 #application {
     height: 100%;
     width: 100%;
 }
 #map-controls-desktop {
     background-color: rgba(27, 28, 29,.9);
+    margin-top:0;
+    margin-bottom:0;
+    height:100%;
+    padding:1em;
 }
 #map-controls-desktop > .ui.input {
     margin:1em;
@@ -18,4 +21,5 @@
 #map-page{
     height: 100%;
     width: 100%;
+    margin: 0;
 }

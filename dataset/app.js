@@ -4,6 +4,7 @@ var csvToObjectUtils = require('./csv-to-object-utils');
 var businessFactory = require('./factories/BusinessFactory');
 var mongoConnection = require('../mongo/mongoConnection');
 
+
 function createBusinessRecords() {
     var deferred = Q.defer();
 
@@ -54,16 +55,21 @@ function saveToMongo(businessRecords){
 
     return deferred.promise;
 }
+function decorateWithLocationData(businesses){
+    return require('./utilities/latLongDecorator').findLatLong(businesses);
+}
 function kickOffSavePromise(business){
     return business.save();
 }
 function run(){
     createBusinessRecords()
+        .then(decorateWithLocationData)
         .then(saveToMongo)
         .then(function() {
             console.log("Finished");
            process.exit();
         });
+    
 }
 module.exports = exports;
 exports.run = run;
