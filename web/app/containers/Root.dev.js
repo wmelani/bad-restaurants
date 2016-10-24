@@ -7,7 +7,6 @@ export default class Root extends Component {
     render() {
         const { store } = this.props;
         var divProps = {...this.props};
-        console.log("hi");
         delete divProps.store;
         return (
             <Provider store={store}>

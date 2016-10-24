@@ -8,9 +8,8 @@ var dir_css = path.resolve(__dirname, 'css');
 var dir_build = path.resolve(__dirname, 'dist');
 module.exports = {
     entry: [
-        'webpack-dev-server/client?http://0.0.0.0:8080', // WebpackDevServer host and port
-        'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors,
         'react-hot-loader/patch',
+        'webpack-hot-middleware/client',
         "babel-polyfill",
         path.resolve(__dirname, 'app/index.js')
     ],
@@ -19,7 +18,7 @@ module.exports = {
         filename: 'bundle.js'
     },
     resolve: {
-       modulesDirectories: ['node_modules', dir_js]
+       modules: ['node_modules', dir_js]
     },
     plugins: [
         new webpack.NoErrorsPlugin(),
@@ -28,8 +27,9 @@ module.exports = {
         }),
         new webpack.HotModuleReplacementPlugin()
     ],
+    target: "web",
     module: {
-        loaders: [
+        rules : [
             {
                 loader: 'file?name=assets[name].[ext]',
                 test: /\.png($|\?)|\.woff($|\?)|\.woff2($|\?)|\.ttf($|\?)|\.eot($|\?)|\.svg($|\?)/
@@ -39,7 +39,7 @@ module.exports = {
                 include: [
                     dir_js
                 ],
-                loaders : ["babel"]
+                loader : "babel"
 
             },
             {
@@ -48,7 +48,7 @@ module.exports = {
             },
             {
                 test: /\.s?css$/,
-                loaders: ["style", "css?sourceMap", "sass?sourceMap"],
+                loaders: ["style", "css?sourceMap", "sass?sourceMap"]
             },
             {
                 test: /\.json$/,
