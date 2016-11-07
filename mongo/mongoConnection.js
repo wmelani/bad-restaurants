@@ -1,10 +1,6 @@
 var mongoose = require('mongoose');
 var Q = require('q');
 
-
-
-
-
 function connect(configuration) {
     var deferred = Q.defer();
 
@@ -14,6 +10,7 @@ function connect(configuration) {
 
 
     db.on('error', function (e) {
+        console.log("error connecting", e);
         deferred.reject(e);
     });
     db.on('open', function () {

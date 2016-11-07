@@ -1994,9 +1994,9 @@ globule@^1.0.0:
     lodash "~4.9.0"
     minimatch "~3.0.0"
 
-google-map-react@^0.18.3:
-  version "0.18.3"
-  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-0.18.3.tgz#2c29cc2fcec47d8b132ac6e6ff1f349d9d6bf680"
+google-map-react:
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/google-map-react/-/google-map-react-0.20.1.tgz#1ecfde579324288ff34d8c726a4ba1938caacd59"
   dependencies:
     eventemitter3 "^1.1.0"
     fbjs "^0.8.3"

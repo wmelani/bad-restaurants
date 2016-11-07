@@ -1,6 +1,6 @@
 {
   "database": {
-    "host": "localhost",
+    "host": "mongo",
     "password": null,
     "username": null,
     "name": "badRestaurants",

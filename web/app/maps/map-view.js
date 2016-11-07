@@ -59,6 +59,7 @@ export default class MapView extends React.Component {
         delete divProps.markers;
         delete divProps.mapCenter;
         delete divProps.onMarkerSelected;
+        delete divProps.onZoomChanged;
         delete divProps.onCenterChanged;
         return (
             <div id="map-view" {...divProps}>
