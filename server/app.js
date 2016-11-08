@@ -1,6 +1,4 @@
-var path = require('path');
-
-var app = {};
+const app = {};
 
 app.config = require('../config');
 
@@ -13,8 +11,7 @@ function run(){
     if (app.__initialized){
         throw new Error("app was already initialized");
     }
-
-    app.logger = require('./logger').create(path.join(__dirname,app.config.paths.logs));
+    app.logger = require('./logger').create(app.config.paths.logs);
     app.logger.info("App started");
     app.controllers.Business = require('./controllers/business');
     app.repositories.Business = require('./repositories/business');

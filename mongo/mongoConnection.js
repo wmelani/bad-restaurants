@@ -1,12 +1,12 @@
-var mongoose = require('mongoose');
-var Q = require('q');
+const mongoose = require('mongoose');
+const Q = require('q');
 
 function connect(configuration) {
-    var deferred = Q.defer();
+    const deferred = Q.defer();
 
     mongoose.connect(createMongoString(configuration));
     mongoose.set('debug', true);
-    var db = mongoose.connection;
+    const db = mongoose.connection;
 
 
     db.on('error', function (e) {
@@ -21,7 +21,7 @@ function connect(configuration) {
 
 
 function createMongoString(configuration) {
-    var url = 'mongodb://';
+    let url = 'mongodb://';
     if (configuration.username && configuration.password) {
         url += configuration.username + ":" + configuration.password + "@";
     }

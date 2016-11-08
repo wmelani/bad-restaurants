@@ -1,6 +1,6 @@
-var serve = require('koa-static');
-var koa = require('koa')();
-var router = require('koa-router')();
+const serve = require('koa-static');
+const koa = require('koa')();
+const router = require('koa-router')();
 
 
 

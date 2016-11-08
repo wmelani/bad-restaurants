@@ -1,38 +1,34 @@
-var _ = require('lodash');
-var Q = require('q');
-var csvToObjectUtils = require('./csv-to-object-utils');
-var businessFactory = require('./factories/BusinessFactory');
-var mongoConnection = require('../mongo/mongoConnection');
+const _ = require('lodash');
+const path = require('path');
+const Q = require('q');
+const csvToObjectUtils = require('./utilities/csv-to-object-utils');
+const businessFactory = require('./factories/BusinessFactory');
+const mongoConnection = require('../mongo/mongoConnection');
 
 
 function createBusinessRecords() {
-    var deferred = Q.defer();
+    const deferred = Q.defer();
 
-    var businessesPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + '/businesses_plus.csv');
-    var inspectionsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + '/inspections_plus.csv');
-    var violationsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(__dirname + '/violations_plus.csv');
-
-
-
-
+    const businessesPromise = csvToObjectUtils.readCSVFileToObjectsPromise(path.resolve(__dirname,'../resources/businesses_plus.csv'));
+    const inspectionsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(path.resolve(__dirname,'../resources/inspections_plus.csv'));
+    const violationsPromise = csvToObjectUtils.readCSVFileToObjectsPromise(path.resolve(__dirname,'../resources/violations_plus.csv'));
 
     Q.all([businessesPromise,inspectionsPromise,violationsPromise]).then(function(x){
+        const businesses = x[0];
+        const inspections = x[1];
+        const violations = x[2];
 
-        var businesses = x[0];
-        var inspections = x[1];
-        var violations = x[2];
 
-
-        var groupedInspections = _.groupBy(inspections,"business_id");
-        var groupedViolations = _.groupBy(violations,"business_id");
+        const groupedInspections = _.groupBy(inspections,"business_id");
+        const groupedViolations = _.groupBy(violations,"business_id");
 
         var businessModels = [];
-        for (var i = 0; i < businesses.length; i++){
-            var business = businesses[i];
+        for (let i = 0; i < businesses.length; i++){
+            let business = businesses[i];
 
-            var inspectionsForBusiness = groupedInspections[business.business_id];
-            var violationsForBusiness = groupedViolations[business.business_id];
-            var model = businessFactory.create(business,inspectionsForBusiness,violationsForBusiness);
+            let inspectionsForBusiness = groupedInspections[business.business_id];
+            let violationsForBusiness = groupedViolations[business.business_id];
+            let model = businessFactory.create(business,inspectionsForBusiness,violationsForBusiness);
             businessModels.push(model);
         }
         deferred.resolve(businessModels);
@@ -44,8 +40,8 @@ function saveToMongo(businessRecords){
     mongoConnection.connect(app.config.database)
         .then(function(database){
            app.database = database;
-            var promises = [];
-            for (var i = 0; i < businessRecords.length; i++){
+            const promises = [];
+            for (let i = 0; i < businessRecords.length; i++){
                 promises.push(kickOffSavePromise(businessRecords[i]))
             }
             Q.all(promises).then(function(x){
@@ -73,4 +69,4 @@ function run(){
 }
 module.exports = exports;
 exports.run = run;
-var app = this;
+const app = this;

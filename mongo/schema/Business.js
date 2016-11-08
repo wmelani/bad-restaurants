@@ -1,10 +1,10 @@
-var mongoose = require('mongoose');
-var inspectionModel = require('./Inspection').InspectionSchema;
-var violationModel = require('./Violation').ViolationSchema;
+const mongoose = require('mongoose');
+const inspectionModel = require('./Inspection').InspectionSchema;
+const violationModel = require('./Violation').ViolationSchema;
 
-var Schema = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-var business = new Schema({
+const business = new Schema({
     "id" : mongoose.Schema.Types.ObjectId,
     "name" : String,
     "businessId" : String,

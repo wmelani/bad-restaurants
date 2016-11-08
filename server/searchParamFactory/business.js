@@ -1,5 +1,19 @@
+function sanitizeInputParams(defaults, params) {
+    let result = {};
+    for (let prop in defaults) {
+        if (typeof params[prop] !== "undefined") {
+            result[prop] = params[prop];
+            if (typeof defaults[prop] === "number") {
+                result[prop] = parseInt(result[prop]);
+            }
+            continue;
+        }
+        result[prop] = defaults[prop];
+    }
+    return result;
+}
 function searchBusinesses(params){
-    var defaults = { //todo: put in config file
+    const defaults = { //todo: put in config file
         "lat" : undefined,
         "long" : undefined,
         "radius" : 500,
@@ -7,16 +21,16 @@ function searchBusinesses(params){
         "minimum" : 0,
         "maximum" : 100
     };
+    return sanitizeInputParams(defaults, params);
 
-    return Object.assign({},defaults, params);
 }
 function searchBusinessesByName(params){
-    var defaults = {
+    const defaults = {
         "limit" : 25,
         "name" : undefined
     };
+    return sanitizeInputParams(defaults, params);
 
-    return Object.assign({},defaults, params);
 }
 
 module.exports = exports;

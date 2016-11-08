@@ -1,6 +1,6 @@
-var mongoose = require('mongoose');
-var Q = require('q');
-var app = require('../app');
+const mongoose = require('mongoose');
+const Q = require('q');
+const app = require('../app');
 
 
 function * findById(id) {
@@ -29,7 +29,7 @@ function * search(params) {
         throw new Error("Radius must be greater than 0");
     }
     try {
-        var query = app.models.Business.find( {
+        const query = app.models.Business.find( {
             "location.coordinates": {
                 '$near': {
                     '$maxDistance': params.radius,
@@ -40,7 +40,7 @@ function * search(params) {
 
         }).limit(params.limit);
 
-        var result = yield Q.nfcall(query.exec.bind(query));
+        const result = yield Q.nfcall(query.exec.bind(query));
         console.log(result.length);
         app.logger.info("Found " + result.length + " results for search with params " + JSON.stringify(params, null, 4));
 
@@ -60,7 +60,7 @@ function * searchByName(params) {
     }
     try {
 
-        var query = app.models.Business.aggregate( [
+        const query = app.models.Business.aggregate( [
             // Stage 1
             {
                 $match: { '$text': { '$search': params.name } }
@@ -74,7 +74,7 @@ function * searchByName(params) {
             { $limit : parseInt(params.limit,10) }
         ]);
 
-        var result = yield Q.nfcall(query.exec.bind(query));
+        const result = yield Q.nfcall(query.exec.bind(query));
         console.log(result.length);
         app.logger.info("Found " + result.length + " results for search with params " + JSON.stringify(params, null, 4));
 

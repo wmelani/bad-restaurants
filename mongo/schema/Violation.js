@@ -1,12 +1,11 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
-var violation = new Schema({
+const violation = new Schema({
     "date" : Date,
     "violationTypeId" : String,
     "riskCategory" : String,
     "description" : String
 });
 
-//"business_id","date","ViolationTypeID","risk_category","description"
 exports.ViolationSchema = violation;

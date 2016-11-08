@@ -1,11 +1,11 @@
-var businessSchema = require('../../mongo/schema/Business.js');
-var inspectionsFactory = require('./InspectionFactory');
-var violationsFactory = require('./ViolationFactory');
-var dateUtilities = require('../utilities/dateUtilities');
+const businessSchema = require('../../mongo/schema/Business.js');
+const inspectionsFactory = require('./InspectionFactory');
+const violationsFactory = require('./ViolationFactory');
+const dateUtilities = require('../utilities/dateUtilities');
 
 
 function create (business, inspections,violations) {
-    var model = {
+    const model = {
         "businessId" : business.business_id,
         "phoneNumber" : business.phone_number,
         "name" : business.name,
@@ -33,16 +33,16 @@ function create (business, inspections,violations) {
     }
     if (inspections){
         model.inspections = [];
-        for (var i = 0; i < inspections.length; i++){
-            var inspection = inspectionsFactory.create(inspections[i]);
+        for (let i = 0; i < inspections.length; i++){
+            let inspection = inspectionsFactory.create(inspections[i]);
             model.inspections.push(inspection);
         }
         model.currentScore = getCurrentScore(model.inspections);
     }
     if (violations){
         model.violations = [];
-        for (var i = 0; i < violations.length; i++){
-            var violation = violationsFactory.create(violations[i]);
+        for (let i = 0; i < violations.length; i++){
+            let violation = violationsFactory.create(violations[i]);
             model.violations.push(violation);
         }
     }
@@ -50,8 +50,8 @@ function create (business, inspections,violations) {
 }
 function getCurrentScore(inspections){
     var sortedRecords = dateUtilities.sortRecordsOnDate(inspections,"date").reverse();
-    for (var i = 0; i < sortedRecords.length; i++){
-        var current = sortedRecords[i];
+    for (let i = 0; i < sortedRecords.length; i++){
+        let current = sortedRecords[i];
         if (current.score !== null){
             return current.score;
         }

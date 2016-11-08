@@ -1,18 +1,18 @@
-var fs = require('fs');
-var Q = require('Q');
-var parse = require('csv').parse;
+const fs = require('fs');
+const Q = require('Q');
+const parse = require('csv').parse;
 
 
 function turnListOfArraysIntoObject(keys,objects){
 
-    var results = [];
-    for (var i = 0; i < objects.length; i++){
-        var row = objects[i];
+    const results = [];
+    for (let i = 0; i < objects.length; i++){
+        let row = objects[i];
 
-        var result = {};
-        for (var j = 0; j < row.length; j++){
-            var val = row[j];
-            var key = keys[j];
+        let result = {};
+        for (let j = 0; j < row.length; j++){
+            let val = row[j];
+            let key = keys[j];
             result[key] = val;
         }
         results.push(result);
@@ -23,17 +23,17 @@ function turnListOfArraysIntoObject(keys,objects){
 
 function readCSVFileToObjects(fileName){
 
-    var deferred = Q.defer();
+    const deferred = Q.defer();
 
     Q.nfcall(fs.readFile, fileName, "utf-8")
         .then(readCsvFilePromise)
         .then(function(arrayOfArrays){
 
-            var keys = arrayOfArrays[0];
-            var rest = arrayOfArrays.slice(1);
-            var results = turnListOfArraysIntoObject(keys,rest);
+            const keys = arrayOfArrays[0];
+            const rest = arrayOfArrays.slice(1);
+            const results = turnListOfArraysIntoObject(keys,rest);
             deferred.resolve(results);
-        });
+        },rej => console.log(rej));
 
     return deferred.promise;
 }

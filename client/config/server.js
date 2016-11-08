@@ -6,9 +6,9 @@ const hotMiddleware = require('webpack-hot-middleware');
 const httpProxyMiddleware = require('http-proxy-middleware');
 
 const webpack = require('webpack');
-const webpackConfig = require('./webpack.config');
+const webpackConfig = require('./webpack.config.js');
 const compiler = webpack(webpackConfig);
-const globalConfig = require('../config.json');
+const globalConfig = require('../../config.json');
 
 
 app.use(httpProxyMiddleware('/api/**', {
@@ -22,7 +22,7 @@ app.use(httpProxyMiddleware('/api/**', {
 app.use(historyMiddleware());
 
 
-app.use(express.static(__dirname));
+app.use(express.static(require('path').resolve(__dirname,'../')));
 app.use(devMiddleware(compiler,  {
     noInfo: true
 }));

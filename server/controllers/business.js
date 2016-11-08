@@ -1,9 +1,9 @@
-var app = require('../app');
-var responseEnvelopeHelper = require("./responseEnvelopeHelper");
-var searchParamFactory = require('../searchParamFactory/business');
+const app = require('../app');
+const responseEnvelopeHelper = require("./responseEnvelopeHelper");
+const searchParamFactory = require('../searchParamFactory/business');
 function *findById(next){
     try {
-        var business = yield app.repositories.Business.findById(this.params.id);
+        const business = yield app.repositories.Business.findById(this.params.id);
         if (business == null){
             this.statusCode = 404;
             this.body = responseEnvelopeHelper.buildErrorEnvelope("Business with id " + this.params.id + " not found",404);
@@ -19,8 +19,8 @@ function *findById(next){
 
 function *search(next){
     try {
-        var searchParams  = searchParamFactory.searchBusinesses(this.query);
-        var businesses = yield app.repositories.Business.search(searchParams);
+        const searchParams  = searchParamFactory.searchBusinesses(this.query);
+        const businesses = yield app.repositories.Business.search(searchParams);
         this.body = responseEnvelopeHelper.buildCollectionResponseEnvelope(businesses)
     }
     catch(e){
@@ -30,8 +30,8 @@ function *search(next){
 }
 function *searchByName(next){
     try {
-        var searchParams  = searchParamFactory.searchBusinessesByName(this.query);
-        var businesses = yield app.repositories.Business.searchByName(searchParams);
+        const searchParams  = searchParamFactory.searchBusinessesByName(this.query);
+        const businesses = yield app.repositories.Business.searchByName(searchParams);
         this.body = responseEnvelopeHelper.buildCollectionResponseEnvelope(businesses)
     }
     catch(e){

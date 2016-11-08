@@ -1,6 +1,6 @@
 
 function buildErrorEnvelope(error,httpStatus){
-    var formattedError = error.message;
+    let formattedError = error.message;
     if(process.env.NODE_ENV === "Debug"){
         formattedError += "\n\n\n\n" + error.stack;
     }

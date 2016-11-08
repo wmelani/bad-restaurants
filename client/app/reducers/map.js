@@ -1,6 +1,6 @@
 import { MAP_CENTER_CHANGED, CENTER_CHANGED, ZOOM_CHANGED} from '../constants/ActionTypes'
 
-var config = require("../../config.json");
+var config = require("../../config/config.json");
 
 const initialState = {
     mapCenter : {

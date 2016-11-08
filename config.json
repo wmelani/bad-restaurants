@@ -20,8 +20,8 @@
     "root": ""
   },
   "paths": {
-    "static": "web/dist",
-    "logs": "logs"
+    "static": "client/dist",
+    "logs": "src/logs"
   },
   "webapp": {
     "map": {

@@ -1,20 +1,20 @@
-var NodeGeocoder = require('node-geocoder');
-var app = require('../app');
-var options = {
+const NodeGeocoder = require('node-geocoder');
+const app = require('../app');
+const options = {
     provider: 'google',
     httpAdapter: 'https',
     apiKey: app.config.apis["google-maps"]
 };
-var geocoder = NodeGeocoder(options);
-var Q = require('q');
+const geocoder = NodeGeocoder(options);
+const Q = require('q');
 
 function findLatLong(businesses){
-    var deferred = Q.defer();
-    var businessesMissingLocationInfo = businesses.filter(function(x){
+    const deferred = Q.defer();
+    let businessesMissingLocationInfo = businesses.filter(function(x){
         return x.location.coordinates == null;
     });
     
-    var names =
+    let names =
         businessesMissingLocationInfo.map(function(x) {
 
             return x.location.address
@@ -30,13 +30,14 @@ function findLatLong(businesses){
         if (err){
             deferred.reject(err);
         }
-        for (var i = 0; i < results.length; i++){
-            var business = businessesMissingLocationInfo[i];
-            var result = results[i];
+        for (let i = 0; i < results.length; i++){
+            let business = businessesMissingLocationInfo[i];
+            let result = results[i];
             if (!result.error){
                 console.log("found lat/long for " + business.name);
                 business.location.coordinates = [result.value.longitude, result.value.latitude];
             }else {
+                console.log(result.error);
                 console.log("could not find lat/long for " + business.name, " searched by ", names[i]);
             }
         }
