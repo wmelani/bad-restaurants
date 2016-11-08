@@ -11,11 +11,11 @@ function run(){
     if (app.__initialized){
         throw new Error("app was already initialized");
     }
-    app.logger = require('./logger').create(app.config.paths.logs);
+    app.logger = require('./config/logger').create(app.config.paths.logs);
     app.logger.info("App started");
     app.controllers.Business = require('./controllers/business');
     app.repositories.Business = require('./repositories/business');
-    require('./koa').register(app);
+    require('./config/koa').register(app);
     require('./routes').registerRoutes(app);
     require('../mongo/mongoConnection').connect(app.config.database);
     app.__initialized = true;

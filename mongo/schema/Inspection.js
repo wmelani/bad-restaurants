@@ -7,5 +7,4 @@ const inspection = new Schema({
     "type" : String
 });
 
-//"business_id","Score","date","type"
 exports.InspectionSchema = inspection;

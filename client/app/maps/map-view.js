@@ -10,6 +10,8 @@ import * as utilities from '../utilities';
 
 import { default as config } from '../../config/config.json';
 
+import { default as globalConfig } from '../../../config.json';
+
 import MapPinFactory from "./factories/map-pin-factory";
 
 const MAP_VARIANCE = 0.00000000001000;
@@ -64,6 +66,7 @@ export default class MapView extends React.Component {
         return (
             <div id="map-view" {...divProps}>
               <GoogleMap
+                  apiKey={globalConfig.apis["google-maps"]}
                 defaultZoom={this.defaultZoom}
                 defaultCenter={this.defaultMapCenter}
                 options={{ styles : config.map.styling}}
