@@ -6,13 +6,13 @@ import shouldPureComponentUpdate from 'react-pure-render/function';
 
 import GoogleMap from 'google-map-react';
 
-import * as utilities from '../utilities';
+import * as utilities from '../../utilities';
 
-import { default as config } from '../../config/config.json';
+import { default as config } from '../../../config/config.json';
 
-import { default as globalConfig } from '../../../config.json';
+import { default as globalConfig } from '../../../../config.json';
 
-import MapPinFactory from "./factories/map-pin-factory";
+import { MapPinFactory } from './MapPins';
 
 const MAP_VARIANCE = 0.00000000001000;
 
@@ -49,13 +49,14 @@ export default class MapView extends React.Component {
             || !utilities.approximatelyEqual(this.props.mapCenter.lng,lng,MAP_VARIANCE));
     }
 
-    shouldComponentUpdate = shouldPureComponentUpdate;
+    //shouldComponentUpdate = shouldPureComponentUpdate;
 
     getMarkers(){
         return this.props.markers.map(marker => {
             return MapPinFactory.createMapPin(marker,this.props.onMarkerSelected.bind(this,marker));
         });
     }
+
     render() {
         const divProps = {...this.props};
         delete divProps.markers;
@@ -66,13 +67,14 @@ export default class MapView extends React.Component {
         return (
             <div id="map-view" {...divProps}>
               <GoogleMap
-                  apiKey={globalConfig.apis["google-maps"]}
+                  bootstrapURLKeys={{key: globalConfig.apis["google-maps"]}}
                 defaultZoom={this.defaultZoom}
                 defaultCenter={this.defaultMapCenter}
                 options={{ styles : config.map.styling}}
                 onChange={this.onChange}
               >
                   {this.getMarkers()}
+
               </GoogleMap>
             </div>
         );

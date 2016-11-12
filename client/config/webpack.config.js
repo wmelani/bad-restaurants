@@ -1,7 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
 var dir_js = path.resolve(__dirname, '../app');
-var dir_css = path.resolve(__dirname, '../css');
 var dir_build = path.resolve(__dirname, '../dist');
 module.exports = {
     entry: [
@@ -14,14 +13,8 @@ module.exports = {
         path: dir_build,
         filename: 'bundle.js'
     },
-    // resolve: {
-    //    modules: ['node_modules', dir_js]
-    // },
     plugins: [
         new webpack.NoErrorsPlugin(),
-        new webpack.ProvidePlugin({
-            '$': 'jquery'
-        }),
         new webpack.HotModuleReplacementPlugin()
     ],
     target: "web",

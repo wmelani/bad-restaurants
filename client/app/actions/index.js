@@ -1,6 +1,6 @@
 import * as ActionType from '../constants/ActionTypes';
 
-import GeoLocationResolver from '../maps/geo-location-resolver';
+import GeoLocationResolver from '../utilities/GeoLocationResolver';
 import BusinessService from "../business-service";
 
 export function getGeoLocation(){

@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 const Q = require('q');
 
 function connect(configuration) {
@@ -21,6 +22,9 @@ function connect(configuration) {
 
 
 function createMongoString(configuration) {
+    if (process.env.MONGO_CONNECTION_STRING){
+        return process.env.MONGO_CONNECTION_STRING;
+    }
     let url = 'mongodb://';
     if (configuration.username && configuration.password) {
         url += configuration.username + ":" + configuration.password + "@";

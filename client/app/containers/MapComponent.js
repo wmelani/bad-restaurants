@@ -1,7 +1,7 @@
 import React from "react";
-import MapControls from '../maps/map-controls';
-import MapView from '../maps/map-view';
-import DetailViewComponent from '../maps/detailed/detail-view-component';
+import MapControls from '../maps/map-controls/MapControls';
+import MapView from '../maps/map-view/MapView';
+import DetailViewComponent from '../maps/single-business-detail-view/detail-view-component';
 import { connect } from 'react-redux';
 import { Grid } from 'semantic-ui-react';
 
@@ -11,15 +11,14 @@ class MapComponent extends React.Component {
 
     constructor(){
         super();
-        this.handleSearchChanged = //_.throttle(::this.handleSearchChanged,2500);
-                                    this.handleSearchChanged.bind(this);
+        this.handleSearchChanged = this.handleSearchChanged.bind(this);
         this.handleSearchChangedImpl = _.throttle(::this.handleSearchChangedImpl,500);
         this.handleCenterChanged = _.throttle(::this.handleCenterChanged,2500);
         this.handleFilterRangeChanged = _.throttle(::this.handleFilterRangeChanged,2500);
     }
     handleSearchChanged(e){
         const value = e.target.value;
-        //this call is throttled.
+        //this call is throttled. todo: why?
         this.handleSearchChangedImpl(value);
     }
     handleSearchChangedImpl(value){
@@ -32,19 +31,23 @@ class MapComponent extends React.Component {
         this.props.onCenterChanged(e);
     }
     async componentDidMount(){
-       this.props.getGeoLocation();
-       this.props.fetchBusinesses(this.props.map.mapCenter,this.props.map.zoomLevel,this.props.minimumFilter,this.props.maximumFilter,10);
+        try {
+            await this.props.getGeoLocation();
+        }
+        catch (e){
+            console.error("Failed to get location");
+        }
+        this.props.fetchBusinesses(
+                this.props.map.mapCenter,
+                this.props.map.zoomLevel,
+                this.props.minimumFilter,
+                this.props.maximumFilter,
+                10);
+
     }
     render() {
-        let divProps = {...this.props};
-        delete divProps.businesses;
-        delete divProps.map;
-        delete divProps.dispatch;
-        delete divProps.getGeoLocation;
-        delete divProps.fetchBusinesses;
-        delete divProps.pinClicked;
-        delete divProps.onCenterChanged;
-        delete divProps.selectedItem;
+        const { businesses, map, pinClicked, onZoomChanged, selectedItem } = this.props;
+
         return (
             <Grid id="map-page">
                 <Grid.Column width={3}
@@ -59,17 +62,17 @@ class MapComponent extends React.Component {
                 <Grid.Column width={9} style={{'padding' : 0}}>
 
                     <MapView
-                             markers={this.props.businesses}
-                             mapCenter={this.props.map.mapCenter}
-                             onMarkerSelected={this.props.pinClicked}
+                             markers={businesses}
+                             mapCenter={map.mapCenter}
+                             onMarkerSelected={pinClicked}
                              onCenterChanged={this.handleCenterChanged}
-                             onZoomChanged={this.props.onZoomChanged}/>
+                             onZoomChanged={onZoomChanged}/>
 
                 </Grid.Column>
                 <Grid.Column width={4}>
 
                     <DetailViewComponent
-                        selectedItem={this.props.selectedItem} />
+                        selectedItem={selectedItem} />
 
                 </Grid.Column>
             </Grid>
